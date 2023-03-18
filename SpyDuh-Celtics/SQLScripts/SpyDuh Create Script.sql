@@ -45,19 +45,14 @@ CREATE TABLE [assignment] (
 )
 GO
 
-CREATE TABLE [friend] (
+CREATE TABLE [relationship] (
   [id] integer PRIMARY KEY identity NOT NULL,
-  [userId] integer,
-  [friendId] integer
+  [userOne] integer,
+  [userTwo] integer,
+  [isEnemy] bit
 )
 GO
 
-CREATE TABLE [foe] (
-  [id] integer PRIMARY KEY identity NOT NULL,
-  [userId] integer,
-  [foeId] integer
-)
-GO
 
 CREATE TABLE [agency] (
   [id] integer PRIMARY KEY identity NOT NULL,
@@ -72,16 +67,10 @@ CREATE TABLE [affiliation] (
 )
 GO
 
-ALTER TABLE [friend] ADD FOREIGN KEY ([userId]) REFERENCES [user] ([id])
+ALTER TABLE [relationship] ADD FOREIGN KEY ([userOne]) REFERENCES [user] ([id])
 GO
 
-ALTER TABLE [friend] ADD FOREIGN KEY ([friendId]) REFERENCES [user] ([id])
-GO
-
-ALTER TABLE [foe] ADD FOREIGN KEY ([userId]) REFERENCES [user] ([id])
-GO
-
-ALTER TABLE [foe] ADD FOREIGN KEY ([foeId]) REFERENCES [user] ([id])
+ALTER TABLE [relationship] ADD FOREIGN KEY ([userTwo]) REFERENCES [user] ([id])
 GO
 
 ALTER TABLE [skill] ADD FOREIGN KEY ([userId]) REFERENCES [user] ([id])
@@ -98,8 +87,15 @@ GO
 
 ALTER TABLE [affiliation] ADD FOREIGN KEY ([userId]) REFERENCES [user] ([id])
 GO
+
+ALTER TABLE [relationship] ADD FOREIGN KEY ([userOne]) REFERENCES [user] ([id])
+GO
+
+ALTER TABLE [relationship] ADD FOREIGN KEY ([userTwo]) REFERENCES [user] ([id])
+GO
+
 INSERT INTO dbo.[user]([name],[location]) VALUES ( '007', 'England')
-INSERT INTO dbo.[user]([name],[location]) VALUES ( 'Hariett', 'America')
+INSERT INTO dbo.[user]([name],[location]) VALUES ( 'Harriet', 'America')
 INSERT INTO dbo.[user]([name],[location]) VALUES ( 'Ethan Hunt', 'America')
 
 INSERT INTO dbo.agency([name]) VALUES ( 'MI6')
@@ -124,10 +120,6 @@ INSERT INTO affiliation([agencyId],[userId]) VALUES ( 1, 1)
 INSERT INTO affiliation([agencyId],[userId]) VALUES ( 2, 2)
 INSERT INTO affiliation([agencyId],[userId]) VALUES ( 1, 2)
 
-INSERT INTO dbo.foe([userId],[foeId]) VALUES ( 2, 3)
-
-INSERT INTO dbo.friend([userId],[friendId]) VALUES ( 1, 2)
-
-
-
-
+INSERT INTO Relationship (userOne,userTwo, isEnemy) VALUES (1,2,1)
+INSERT INTO Relationship (userOne,userTwo, isEnemy) VALUES (1,3,0)
+INSERT INTO Relationship (userOne,userTwo, isEnemy) VALUES (3,2,0)
