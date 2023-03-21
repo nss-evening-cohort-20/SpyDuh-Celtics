@@ -6,10 +6,10 @@ using SpyDuh_Celtics.Models;
 
 namespace SpyDuh_Celtics.Repository
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly string _connectionString;
-        public UserRepository (IConfiguration configuration)
+        public UserRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
@@ -19,7 +19,7 @@ namespace SpyDuh_Celtics.Repository
             get { return new SqlConnection(_connectionString); }
         }
 
-            /*Gets All the Users Data*/
+        /*Gets All the Users Data*/
         public List<User> GetAll()
         {
             using (var conn = Connection)
@@ -77,7 +77,7 @@ namespace SpyDuh_Celtics.Repository
                             Name = reader.GetString(reader.GetOrdinal("Name")),
                             Location = reader.GetString(reader.GetOrdinal("Location")),
                         };
-                    if (!reader.IsDBNull(reader.GetOrdinal("Location")))
+                        if (!reader.IsDBNull(reader.GetOrdinal("Location")))
                         {
                             users.Location = reader.GetString(reader.GetOrdinal("Location"));
                         }
@@ -141,7 +141,7 @@ namespace SpyDuh_Celtics.Repository
                                         OUTPUT INSERTED.id
                                         VALUES (@name, @location);";
                     cmd.Parameters.AddWithValue("@Name", user.Name);
-                    if (user.Location == null) 
+                    if (user.Location == null)
                     {
                         cmd.Parameters.AddWithValue("@Location", DBNull.Value);
                     }
@@ -169,8 +169,8 @@ namespace SpyDuh_Celtics.Repository
 	                                        location = @location
                                         WHERE id = @id";
                     cmd.Parameters.AddWithValue("@id", user.Id);
-                    cmd.Parameters.AddWithValue ("@name", user.Name);
-                    if (user.Location == null) 
+                    cmd.Parameters.AddWithValue("@name", user.Name);
+                    if (user.Location == null)
                     {
                         cmd.Parameters.AddWithValue("@location", DBNull.Value);
                     }
