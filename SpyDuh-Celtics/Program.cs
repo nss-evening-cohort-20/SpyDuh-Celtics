@@ -1,3 +1,5 @@
+using SpyDuh_Celtics.Repositories;
+
 namespace SpyDuh_Celtics
 {
     public class Program
@@ -5,6 +7,7 @@ namespace SpyDuh_Celtics
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddTransient<ISkillsRepository, SkillsRepository>();
 
             // Add services to the container.
 
@@ -18,6 +21,13 @@ namespace SpyDuh_Celtics
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseCors(options =>
+                {
+                    options.AllowAnyOrigin();
+                    options.AllowAnyMethod();
+                    options.AllowAnyHeader();
+                });
+
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
@@ -25,7 +35,6 @@ namespace SpyDuh_Celtics
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
