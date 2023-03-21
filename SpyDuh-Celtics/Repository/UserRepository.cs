@@ -6,18 +6,18 @@ using SpyDuh_Celtics.Models;
 
 namespace SpyDuh_Celtics.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository :  BaseRepository,  IUserRepository
     {
         private readonly string _connectionString;
-        public UserRepository(IConfiguration configuration)
-        {
+        public UserRepository(IConfiguration configuration): base(configuration) { }
+       /* {
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
         private SqlConnection Connection
         {
             get { return new SqlConnection(_connectionString); }
-        }
+        }*/
 
         /*Gets All the Users Data*/
         public List<User> GetAll()
@@ -27,27 +27,29 @@ namespace SpyDuh_Celtics.Repository
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, name, location, FROM [user];";
-                    var reader = cmd.ExecuteReader();
-                    var users = new List<User>();
-                    while (reader.Read())
+                    cmd.CommandText = "SELECT id, name, location FROM [user];";
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        var user = new User()
+                        var users = new List<User>();
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Name = reader.GetString(reader.GetOrdinal("Name")),
-                            Location = reader.GetString(reader.GetOrdinal("Location")),
-                        };
-                        if (!reader.IsDBNull(reader.GetOrdinal("Location")))
-                        {
-                            user.Location = reader.GetString(reader.GetOrdinal("Location"));
+                            var user = new User()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Location = reader.GetString(reader.GetOrdinal("Location")),
+                            };
+                            if (!reader.IsDBNull(reader.GetOrdinal("Location")))
+                            {
+                                user.Location = reader.GetString(reader.GetOrdinal("Location"));
+                            }
+                            users.Add(user);
                         }
-                        users.Add(user);
+
+                        reader.Close();
+
+                        return users;
                     }
-
-                    reader.Close();
-
-                    return users;
                 }
             }
         }

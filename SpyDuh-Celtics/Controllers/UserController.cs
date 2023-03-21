@@ -36,7 +36,7 @@ namespace SpyDuh_Celtics.Controllers
         public IActionResult Get(string name)
         {
             var user = _userRepository.Get(name);
-            if (user == null) 
+            if (user == null)
             {
                 return NotFound();
             }
