@@ -1,3 +1,5 @@
+using SpyDuh_Celtics.Repositories;
+
 namespace SpyDuh_Celtics
 {
     public class Program
@@ -7,6 +9,8 @@ namespace SpyDuh_Celtics
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddTransient<IRelationshipRepository, RelationshipRepository>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

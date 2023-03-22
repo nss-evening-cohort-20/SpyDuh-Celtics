@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\SpyDuh-Celtics.props" />
+</Project>
