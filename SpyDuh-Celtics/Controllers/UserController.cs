@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Messaging;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SpyDuh_Celtics.Models;
 using SpyDuh_Celtics.Repository;
@@ -16,15 +17,15 @@ namespace SpyDuh_Celtics.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAll()
         {
             return Ok(_userRepository.GetAll());
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        [HttpGet("/by-id/{id}")]
+        public IActionResult GetById(int id)
         {
-            var user = _userRepository.Get(id);
+            var user = _userRepository.GetById(id);
             if (user == null)
             {
                 return NotFound();
@@ -32,10 +33,10 @@ namespace SpyDuh_Celtics.Controllers
             return Ok(user);
         }
 
-        [HttpGet("{name}")]
-        public IActionResult Get(string name)
+        [HttpGet("/by-name/{name}")]
+        public IActionResult GetName(string name)
         {
-            var user = _userRepository.Get(name);
+            var user = _userRepository.GetName(name);
             if (user == null)
             {
                 return NotFound();
@@ -46,8 +47,12 @@ namespace SpyDuh_Celtics.Controllers
         [HttpPost]
         public IActionResult Post(User user)
         { 
-            _userRepository.Add(user);
-            return CreatedAtAction("Get", new { id = user.Id }, user);
+           var newUser = _userRepository.Add(user);
+            return Ok(new
+            {
+                Message = "Created",
+                User = newUser
+            });
         }
 
         [HttpPut("{id}")]

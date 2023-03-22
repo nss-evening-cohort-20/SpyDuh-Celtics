@@ -4,11 +4,11 @@ namespace SpyDuh_Celtics.Repository
 {
     public interface IUserRepository
     {
-        void Add(User user);
+        User Add(User user);
         void Delete(int id);
-        User Get(int id);
-        User Get(string Name);
         List<User> GetAll();
+        User GetById(int id);
+        User GetName(string Name);
         void Update(User user);
     }
 }
