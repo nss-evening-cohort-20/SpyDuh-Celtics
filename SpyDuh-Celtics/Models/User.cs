@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace SpyDuh_Celtics.Models
 {

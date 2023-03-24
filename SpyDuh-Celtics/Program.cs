@@ -6,17 +6,20 @@ namespace SpyDuh_Celtics
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddTransient<ISkillsRepository, SkillsRepository>();
 
+
             // Add services to the container.
 
+            builder.Services.AddTransient<IServicesRepository, ServicesRepository>(); //depedency injection
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            var app = builder.Build();
+            var app = builder.Build(); //buidling app
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -36,9 +39,10 @@ namespace SpyDuh_Celtics
 
             app.UseAuthorization();
 
+
             app.MapControllers();
 
-            app.Run();
+            app.Run(); //Listening for requests
         }
     }
 }
