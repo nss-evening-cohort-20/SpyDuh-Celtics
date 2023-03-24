@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using SpyDuh_Celtics.Models;
+using SpyDuh_Celtics.Repositories;
 
 namespace SpyDuh_Celtics.Controllers
 {
@@ -9,27 +10,28 @@ namespace SpyDuh_Celtics.Controllers
     [ApiController]
     public class ServicesController : ControllerBase
     {
+        private IServicesRepository _servicesRepository;
 
-        public ServicesController() { }
+        public ServicesController(IServicesRepository servicesRepository) {
+            _servicesRepository = servicesRepository;
+        }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
         {
-            //return Ok(_postRepository.GetAll());
-            return Ok("getting service data");
+            return Ok(_servicesRepository.GetAll());
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            //var post = _postRepository.GetById(id);
-            //if (post == null)
-            //{
-            //    return NotFound();
-            //}
-            //return Ok(post);
+            var service = _servicesRepository.GetById(id);
+            if (service == null)
+            {
+                return NotFound();
+            }
+            return Ok(service);
 
-            return Ok($"getting data for {id}");
         }
 
         [HttpPost]
