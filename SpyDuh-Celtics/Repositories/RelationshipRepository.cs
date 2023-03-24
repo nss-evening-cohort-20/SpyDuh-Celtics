@@ -221,26 +221,6 @@ namespace SpyDuh_Celtics.Repositories
         }
 
         /* Create Delete Request to delete Friend from selected user */
-
-
-        //public void ChangeFriendToFoe(Relationship relationship)
-        //{
-        //    using (var conn = Connection)
-        //    {
-        //        conn.Open();
-        //        using (var cmd = conn.CreateCommand())
-        //        {
-        //            cmd.CommandText = @"
-        //                      UPDATE relationship
-        //                         SET isEnemy = 1 
-        //                       WHERE isEnemy = 0
-        //                         AND relationship.userTwo = @id";
-
-        //            DbUtils.AddParameter(cmd, "@id", relationship.UserTwo);
-        //        }
-        //    }
-        //}
-
         public void Delete(int id)
         {
             using (var conn = Connection)
