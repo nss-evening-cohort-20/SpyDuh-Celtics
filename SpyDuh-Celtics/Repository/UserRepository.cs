@@ -6,55 +6,57 @@ using SpyDuh_Celtics.Models;
 
 namespace SpyDuh_Celtics.Repository
 {
-    public class UserRepository
+    public class UserRepository : BaseRepository, IUserRepository
     {
         private readonly string _connectionString;
-        public UserRepository (IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
+        public UserRepository(IConfiguration configuration) : base(configuration) { }
+         /*{
+             _connectionString = configuration.GetConnectionString("DefaultConnection");
+         }
 
-        private SqlConnection Connection
-        {
-            get { return new SqlConnection(_connectionString); }
-        }
+    private SqlConnection Connection
+    {
+        get { return new SqlConnection(_connectionString); }
+    }*/
 
-            /*Gets All the Users Data*/
-        public List<User> GetAll()
+    /*Gets All the Users Data*/
+    public List<User> GetAll()
         {
             using (var conn = Connection)
             {
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, name, location, FROM [user];";
-                    var reader = cmd.ExecuteReader();
-                    var users = new List<User>();
-                    while (reader.Read())
+                    cmd.CommandText = "SELECT id, name, location FROM [user];";
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        var user = new User()
+                        var users = new List<User>();
+                        while (reader.Read())
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Name = reader.GetString(reader.GetOrdinal("Name")),
-                            Location = reader.GetString(reader.GetOrdinal("Location")),
-                        };
-                        if (!reader.IsDBNull(reader.GetOrdinal("Location")))
-                        {
-                            user.Location = reader.GetString(reader.GetOrdinal("Location"));
+                            var user = new User()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                /*Location = reader.GetString(reader.GetOrdinal("Location")),*/
+                            };
+                            if (!reader.IsDBNull(reader.GetOrdinal("Location")))
+                            {
+                                user.Location = reader.GetString(reader.GetOrdinal("Location"));
+                            }
+                            users.Add(user);
                         }
-                        users.Add(user);
+
+                        reader.Close();
+
+                        return users;
                     }
-
-                    reader.Close();
-
-                    return users;
                 }
             }
         }
 
         /*Get the User by ID*/
 
-        public User Get(int id)
+        public User GetById(int id)
         {
             using (var conn = Connection)
             {
@@ -66,33 +68,35 @@ namespace SpyDuh_Celtics.Repository
                                         WHERE id = @id;";
                     cmd.Parameters.AddWithValue("@id", id);
 
-                    var reader = cmd.ExecuteReader();
-
-                    User users = null;
-                    if (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        users = new User()
+                        User user = null;
+                        if (reader.Read())
                         {
-                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Name = reader.GetString(reader.GetOrdinal("Name")),
-                            Location = reader.GetString(reader.GetOrdinal("Location")),
-                        };
-                    if (!reader.IsDBNull(reader.GetOrdinal("Location")))
-                        {
-                            users.Location = reader.GetString(reader.GetOrdinal("Location"));
+                            user = new User()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                /*Location = reader.GetString(reader.GetOrdinal("Location")),*/
+                            };
+                            if (!reader.IsDBNull(reader.GetOrdinal("Location")))
+                            {
+                                user.Location = reader.GetString(reader.GetOrdinal("Location"));
+                            }
                         }
+
+                        reader.Close();
+
+                        return user;
                     }
 
-                    reader.Close();
-
-                    return users;
                 }
             }
         }
 
         /*Get User by Name*/
 
-        public User Get(string Name)
+        public User GetName(string Name)
         {
             using (var conn = Connection)
             {
@@ -113,7 +117,7 @@ namespace SpyDuh_Celtics.Repository
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Name = reader.GetString(reader.GetOrdinal("Name")),
-                            Location = reader.GetString(reader.GetOrdinal("Location")),
+                            /*Location = reader.GetString(reader.GetOrdinal("Location")),*/
                         };
                         if (!reader.IsDBNull(reader.GetOrdinal("Location")))
                         {
@@ -130,7 +134,7 @@ namespace SpyDuh_Celtics.Repository
 
         /*Adds New User*/
 
-        public void Add(User user)
+        public User Add(User user)
         {
             using (var conn = Connection)
             {
@@ -141,7 +145,7 @@ namespace SpyDuh_Celtics.Repository
                                         OUTPUT INSERTED.id
                                         VALUES (@name, @location);";
                     cmd.Parameters.AddWithValue("@Name", user.Name);
-                    if (user.Location == null) 
+                    if (user.Location == null)
                     {
                         cmd.Parameters.AddWithValue("@Location", DBNull.Value);
                     }
@@ -151,6 +155,7 @@ namespace SpyDuh_Celtics.Repository
                     }
 
                     user.Id = (int)cmd.ExecuteScalar();
+                    return user;
                 }
             }
         }
@@ -169,8 +174,8 @@ namespace SpyDuh_Celtics.Repository
 	                                        location = @location
                                         WHERE id = @id";
                     cmd.Parameters.AddWithValue("@id", user.Id);
-                    cmd.Parameters.AddWithValue ("@name", user.Name);
-                    if (user.Location == null) 
+                    cmd.Parameters.AddWithValue("@name", user.Name);
+                    if (user.Location == null)
                     {
                         cmd.Parameters.AddWithValue("@location", DBNull.Value);
                     }
