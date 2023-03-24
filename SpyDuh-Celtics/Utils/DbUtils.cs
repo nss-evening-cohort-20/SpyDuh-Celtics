@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace SpyDuh_Celtics.Utils
 {
@@ -20,6 +21,13 @@ namespace SpyDuh_Celtics.Utils
 
             return reader.GetString(ordinal);
         }
+
+        //public static bool GetBoolean(SqlDataReader reader, string column)
+        //{
+        //    var ordinal = reader.GetInt32(column);
+            
+        //    return reader.GetInt32(ordinal);
+        //}
 
         /// <summary>
         ///  Get an int from a data reader object.
@@ -119,4 +127,5 @@ namespace SpyDuh_Celtics.Utils
             }
         }
     }
+
 }
