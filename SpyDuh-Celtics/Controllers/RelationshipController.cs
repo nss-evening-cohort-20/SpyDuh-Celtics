@@ -36,16 +36,67 @@ namespace SpyDuh_Celtics.Controllers
         [HttpPost("AddFriend")]
         public IActionResult PostFriend(NewRelationship relationship)
         {
-            _relationshipRepository.AddFriend(relationship);
-            return CreatedAtAction("Get", new { id = relationship.Id }, relationship);
+            try
+            {
+                if (!_relationshipRepository.AddFriend(relationship))
+                {
+                    return BadRequest(relationship);
+                }
+
+                return CreatedAtAction("Get", new { id = relationship.Id }, relationship);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.Contains("FOREIGN KEY constraint"))
+                {
+                    return BadRequest("That relationship id doesn't exist");
+                }
+
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+
         }
+
+
+    //    _relationshipRepository.AddFriend(relationship);
+    //        return CreatedAtAction("Get", new { id = relationship.Id
+    //}, relationship);
 
         [HttpPost("AddFoe")]
         public IActionResult PostFoe(NewRelationship relationship)
         {
-            _relationshipRepository.AddFoe(relationship);
-            return CreatedAtAction("Get", new { id = relationship.Id }, relationship);
+            try
+            {
+                if (!_relationshipRepository.AddFoe(relationship))
+                {
+                    return BadRequest(relationship);
+                }
+
+                return CreatedAtAction("Get", new { id = relationship.Id }, relationship);
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Message.Contains("FOREIGN KEY constraint"))
+                {
+                    return BadRequest("That relationship id doesn't exist");
+                }
+
+                return StatusCode(500, ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
+
+    //    _relationshipRepository.AddFoe(relationship);
+    //        return CreatedAtAction("Get", new { id = relationship.Id
+    //}, relationship);
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)

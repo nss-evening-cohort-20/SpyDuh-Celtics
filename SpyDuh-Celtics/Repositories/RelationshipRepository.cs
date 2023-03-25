@@ -181,7 +181,7 @@ namespace SpyDuh_Celtics.Repositories
 
         /* Create Post Request to add a new Friend to my user id */
 
-        public void AddFriend(NewRelationship relationship)
+        public bool AddFriend(NewRelationship relationship)
         {
             using (var conn = Connection)
             {
@@ -196,12 +196,13 @@ namespace SpyDuh_Celtics.Repositories
                     cmd.Parameters.AddWithValue("@userTwo", relationship.UserTwo);
 
                     relationship.Id = (int)cmd.ExecuteScalar();
+                    return relationship.Id != 0;
                 }
             }
         }
 
         /* Create Post Request to add a new foe to my user id */
-        public void AddFoe(NewRelationship relationship)
+        public bool AddFoe(NewRelationship relationship)
         {
             using (var conn = Connection)
             {
@@ -216,6 +217,7 @@ namespace SpyDuh_Celtics.Repositories
                     cmd.Parameters.AddWithValue("@userTwo", relationship.UserTwo);
 
                     relationship.Id = (int)cmd.ExecuteScalar();
+                    return relationship.Id != 0;
                 }
             }
         }
