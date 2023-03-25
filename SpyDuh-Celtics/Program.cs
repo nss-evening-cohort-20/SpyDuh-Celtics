@@ -1,4 +1,5 @@
 using SpyDuh_Celtics.Repositories;
+using SpyDuh_Celtics.Repository;
 
 namespace SpyDuh_Celtics
 {
@@ -14,8 +15,8 @@ namespace SpyDuh_Celtics
             // Add services to the container.
 
             builder.Services.AddTransient<IRelationshipRepository, RelationshipRepository>();
-
             builder.Services.AddTransient<IServicesRepository, ServicesRepository>(); //depedency injection
+            builder.Services.AddTransient<IUserRepository, UserRepository>();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

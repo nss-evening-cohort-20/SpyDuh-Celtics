@@ -2,46 +2,15 @@
 
 namespace SpyDuh_Celtics.Repositories
 {
-<<<<<<< HEAD
-
     public abstract class BaseRepository
     {
         private readonly string _connectionString;
 
         public BaseRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
-        }
-
-=======
-    /// <summary>
-    ///  A base class for every other Repository class to inherit from.
-    ///  This class is responsible for providing a database connection to each of the repository subclasses
-    /// </summary>
-    public class BaseRepository
-    {
-        /// <summary>
-        ///  A "connection string" is the address of the database.
-        /// </summary>
-        private string _connectionString;
-
-
-        /// <summary>
-        ///  This constructor will be invoked by subclasses.
-        ///  It will save the connection string for later use.
-        /// </summary>
-        public BaseRepository(IConfiguration configuration)
-        {
             _connectionString = configuration.GetConnectionString("LocalConnection");
         }
 
-
-        /// <summary>
-        ///  Represents a connection to the database.
-        ///   This is a "tunnel" to connect the application to the database.
-        ///   All communication between the application and database passes through this connection.
-        /// </summary>
->>>>>>> 298db14f9e9e8791a3c058b09e8017800a1c6d2a
         protected SqlConnection Connection
         {
             get
@@ -49,11 +18,6 @@ namespace SpyDuh_Celtics.Repositories
                 return new SqlConnection(_connectionString);
             }
         }
-<<<<<<< HEAD
-    }
-
-=======
 
     }
->>>>>>> 298db14f9e9e8791a3c058b09e8017800a1c6d2a
 }

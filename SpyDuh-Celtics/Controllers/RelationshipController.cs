@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SpyDuh_Celtics.Models;
 using SpyDuh_Celtics.Repositories;
+using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Http;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

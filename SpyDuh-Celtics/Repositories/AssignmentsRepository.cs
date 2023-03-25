@@ -43,7 +43,7 @@ namespace SpyDuh_Celtics.Repositories
 
             while (reader.Read())
             {
-                results.Add(SkillsFromReader(reader));
+                //results.Add(SkillsFromReader(reader));
             }
 
             return results;
@@ -63,7 +63,7 @@ namespace SpyDuh_Celtics.Repositories
 
             while (reader.Read())
             {
-                result.Add(SkillsFromReader(reader));
+                //result.Add(SkillsFromReader(reader));
             }
 
             return result;
@@ -91,7 +91,7 @@ namespace SpyDuh_Celtics.Repositories
             using var cmd = conn.CreateCommand();
             cmd.CommandText = _skillUpdate;
             cmd.Parameters.AddWithValue("@id", skill.Id);
-            cmd.Parameters.AddWithValue("@skill", skill.Skill);
+            //cmd.Parameters.AddWithValue("@skill", skill.Skill);
             cmd.Parameters.AddWithValue("@userId", skill.UserId);
 
             int rowsAffected = cmd.ExecuteNonQuery();
