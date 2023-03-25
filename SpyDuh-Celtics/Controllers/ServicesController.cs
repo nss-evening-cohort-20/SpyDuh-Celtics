@@ -37,27 +37,26 @@ namespace SpyDuh_Celtics.Controllers
         [HttpPost]
         public IActionResult Post(Services service)
         {
-            //_postRepository.Add(post);
-            //return CreatedAtAction("Get", new { id = post.Id }, post);
-            return Ok($"adding data for {service.Id} {service.Service}");
+            _servicesRepository.Add(service);
+            return CreatedAtAction("Get", new { id = service.Id }, service);
         }
 
         [HttpPut("{id}")]
         public IActionResult Put(int id, Services service)
         {
-            //if (id != post.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (id != service.Id)
+            {
+                return BadRequest();
+            }
 
-            //_postRepository.Update(post);
+            _servicesRepository.Update(service);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            //_postRepository.Delete(id);
+            _servicesRepository.Remove(id);
             return NoContent();
         }
     }
