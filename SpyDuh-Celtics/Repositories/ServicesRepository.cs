@@ -14,7 +14,22 @@ namespace SpyDuh_Celtics.Repositories
 
         public void Add(Services service)
         {
-            throw new NotImplementedException();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        INSERT INTO service (service, userId)
+                        OUTPUT INSERTED.ID
+                        VALUES (@service, @userId)";
+
+                    DbUtils.AddParameter(cmd, "@service", service.Service);
+                    DbUtils.AddParameter(cmd, "@userId", service.UserId);
+
+                    service.Id = (int)cmd.ExecuteScalar();
+                }
+            }
         }
 
         public IList<Services> GetAll()
@@ -83,12 +98,38 @@ namespace SpyDuh_Celtics.Repositories
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "DELETE FROM service WHERE Id = @Id";
+                    DbUtils.AddParameter(cmd, "@id", id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void Update(Services service)
         {
-            throw new NotImplementedException();
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        UPDATE service
+                           SET service = @service,
+                               userId = @userId
+                         WHERE Id = @Id";
+
+                    DbUtils.AddParameter(cmd, "@service", service.Service);
+                    DbUtils.AddParameter(cmd, "@userId", service.UserId);
+                    DbUtils.AddParameter(cmd, "@Id", service.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
